@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+<html lang="en">
+    <style>
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+      }
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <title>James Matsons Drone Object Detector</title>
+</head>
+<body>
+    <h1>Drone Command</h1>
+    <div id="message-container">
+        <img src="" class="center" alt="No signal yet..." width="500" height="600" id="img-container">
+    </div>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect',
+          function() {  
+             console.log('client connected OK')
+          });
+      </script>
+    <script>
+        function createImageMessageDOM(data) {
+            console.log(data)
+            var img = document.createElement("img");
+            img.src = data.binary;
+            img.style.width = '100%';
+            return img;
+        }
+    </script>
+    <script>
+        function appendImageMessage(data) {
+            var imgContainer = document.getElementById('img-container');
+            imgContainer.src = data.binary;
+        }
+    </script>
+    <script>
+        socket.on("send-image", function(data){
+            appendImageMessage(data)
+        })
+    </script>
+</body>
+</html>
